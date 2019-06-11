@@ -41,17 +41,12 @@
     }
   ];
   function buildQuiz() {
-    // we'll need a place to store the HTML output
     const output = [];
 
-    // for each question...
     myQuestions.forEach((currentQuestion, questionNumber) => {
-      // we'll want to store the list of answer choices
       const answers = [];
 
-      // and for each available answer...
       for (letter in currentQuestion.answers) {
-        // ...add an HTML radio button
         answers.push(
           `<label>
              <input type="radio" name="question${questionNumber}" value="${letter}">
@@ -61,16 +56,14 @@
         );
       }
 
-      // add this question and its answers to the output
       output.push(
         `<div class="slide">
-           <div class="question"> ${currentQuestion.question} </div>
+           <div class="question"> ${currentQuestion.questiooutputn} </div>
            <div class="answers"> ${answers.join("")} </div>
          </div>`
       );
     });
-
-    // finally combine our output list into one string of HTML and put it on the page
+    console.log(output);
     quizContainer.innerHTML = output.join("");
   }
 
@@ -78,31 +71,22 @@
     // gather answer containers from our quiz
     const answerContainers = quizContainer.querySelectorAll(".answers");
 
-    // keep track of user's answers
     let numCorrect = 0;
 
-    // for each question...
     myQuestions.forEach((currentQuestion, questionNumber) => {
-      // find selected answer
       const answerContainer = answerContainers[questionNumber];
       const selector = `input[name=question${questionNumber}]:checked`;
       const userAnswer = (answerContainer.querySelector(selector) || {}).value;
 
-      // if answer is correct
       if (userAnswer === currentQuestion.correctAnswer) {
-        // add to the number of correct answers
         numCorrect++;
 
-        // color the answers green
         answerContainers[questionNumber].style.color = "lightgreen";
       } else {
-        // if answer is wrong or blank
-        // color the answers red
         answerContainers[questionNumber].style.color = "red";
       }
     });
 
-    // show number of correct answers out of total
     resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
   }
 
@@ -134,13 +118,10 @@
     showSlide(currentSlide - 1);
   }
 
-  update = setInterval("timer001()", 1000);
-
   const quizContainer = document.getElementById("quiz");
   const resultsContainer = document.getElementById("results");
   const submitButton = document.getElementById("submit");
 
-  // display quiz right away
   buildQuiz();
 
   const previousButton = document.getElementById("previous");
@@ -150,8 +131,26 @@
 
   showSlide(0);
 
-  // on submit, show results
   submitButton.addEventListener("click", showResults);
   previousButton.addEventListener("click", showPreviousSlide);
   nextButton.addEventListener("click", showNextSlide);
 })();
+var secondsDown = 5;
+var timeIntervalUp = setInterval(function() {
+  startTimer();
+  console.log("two");
+}, 1000);
+
+function startTimer() {
+  console.log("one");
+  var count = document.getElementById("countDown");
+  console.log(count);
+  count.innerHTML = "Time Remaining: " + secondsDown;
+  secondsDown--;
+
+  if (secondsDown == 0) {
+    clearInterval(timeIntervalUp);
+    document.getElementById("countDown").innerHTML = "";
+    showNextSlide();
+  }
+}
