@@ -38,66 +38,20 @@
         b: "False"
       },
       correctAnswer: "a"
-    },
-    {
-      question:
-        "What is the name of the symbol found in the middle of the Indian Flag?",
-      answers: {
-        a: "The Wheel",
-        b: "Ashoka Chakra",
-        c: "Wheel of India",
-        d: "The Wheel of Karma"
-      },
-      correctAnswer: "b"
-    },
-    {
-      question: "Which one of these Religions wasn't found in India?",
-      answers: {
-        a: "Buddhism",
-        b: "Hinduism",
-        c: "Islam",
-        d: "Jainism"
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "What one of these household board games was found In India?",
-      answers: {
-        a: "Snakes and Ladders",
-        b: "Yatzee",
-        c: "Monopoly",
-        d: "Candy Land"
-      },
-      correctAnswer: "a"
-    },
-    {
-      question:
-        "In 2001 India's Kumbha Mela broke the record for the Most amount of people at one event. How many people were there?",
-      answers: {
-        a: "100,000",
-        b: "1 million",
-        c: "20 million",
-        d: "60 million"
-      },
-      correctAnswer: "d"
-    },
-    {
-      question:
-        "True of False? India has the largest amount of vegetarians in the world.",
-      answers: {
-        a: "True",
-        b: "False"
-      },
-      correctAnswer: "a"
     }
   ];
   function buildQuiz() {
+    // we'll need a place to store the HTML output
     const output = [];
 
+    // for each question...
     myQuestions.forEach((currentQuestion, questionNumber) => {
+      // we'll want to store the list of answer choices
       const answers = [];
 
+      // and for each available answer...
       for (letter in currentQuestion.answers) {
+        // ...add an HTML radio button
         answers.push(
           `<label>
              <input type="radio" name="question${questionNumber}" value="${letter}">
@@ -107,6 +61,7 @@
         );
       }
 
+      // add this question and its answers to the output
       output.push(
         `<div class="slide">
            <div class="question"> ${currentQuestion.question} </div>
@@ -115,28 +70,39 @@
       );
     });
 
+    // finally combine our output list into one string of HTML and put it on the page
     quizContainer.innerHTML = output.join("");
   }
 
   function showResults() {
+    // gather answer containers from our quiz
     const answerContainers = quizContainer.querySelectorAll(".answers");
 
+    // keep track of user's answers
     let numCorrect = 0;
 
+    // for each question...
     myQuestions.forEach((currentQuestion, questionNumber) => {
+      // find selected answer
       const answerContainer = answerContainers[questionNumber];
       const selector = `input[name=question${questionNumber}]:checked`;
       const userAnswer = (answerContainer.querySelector(selector) || {}).value;
 
+      // if answer is correct
       if (userAnswer === currentQuestion.correctAnswer) {
+        // add to the number of correct answers
         numCorrect++;
 
-        answerContainers[questionNumber].style.color = "orange";
+        // color the answers green
+        answerContainers[questionNumber].style.color = "lightgreen";
       } else {
+        // if answer is wrong or blank
+        // color the answers red
         answerContainers[questionNumber].style.color = "red";
       }
     });
 
+    // show number of correct answers out of total
     resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
   }
 
@@ -167,6 +133,8 @@
   function showPreviousSlide() {
     showSlide(currentSlide - 1);
   }
+
+  update = setInterval("timer001()", 1000);
 
   const quizContainer = document.getElementById("quiz");
   const resultsContainer = document.getElementById("results");
